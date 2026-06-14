@@ -1,0 +1,123 @@
+---
+import Base from "../layouts/Base.astro";
+import { site } from "../data/site";
+
+const statusLabel: Record<string, string> = {
+  operational: "Operational",
+  stable: "Stable",
+  shipped: "Shipped",
+  archived: "Archived",
+};
+
+const now = new Date().toISOString().replace("T", " ").slice(0, 16) + " UTC";
+const { links } = site;
+---
+
+<Base title={`${site.name} — ${site.role}`} description={site.sub}>
+  <!-- status bar : the signature -->
+  <div class="statusbar">
+    <div class="wrap row">
+      <div class="status-left">
+        <span class="dot"></span>
+        <span class="label">All systems operational</span>
+      </div>
+      <div class="status-right">{site.location.toLowerCase()} · checked {now}</div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <!-- hero -->
+    <header class="hero">
+      <p class="eyebrow reveal">{site.role} · {site.location}</p>
+      <h1 class="reveal d1">{site.name}</h1>
+      <p class="thesis reveal d2" set:html={site.thesis}></p>
+      <p class="sub reveal d2">{site.sub}</p>
+
+      <nav class="links reveal d3">
+        {links.github && (
+          <a class="btn" href={links.github} target="_blank" rel="noopener">
+            GitHub <span class="arrow">↗</span>
+          </a>
+        )}
+        {links.linkedin && (
+          <a class="btn" href={links.linkedin} target="_blank" rel="noopener">
+            LinkedIn <span class="arrow">↗</span>
+          </a>
+        )}
+        {links.resume && (
+          <a class="btn" href={links.resume} target="_blank" rel="noopener">
+            Résumé <span class="arrow">↗</span>
+          </a>
+        )}
+        {links.email && (
+          <a class="btn primary" href={`mailto:${links.email}`}>
+            Email <span class="arrow">→</span>
+          </a>
+        )}
+      </nav>
+    </header>
+
+    <!-- services / projects -->
+    <section class="section" id="work">
+      <div class="section-head">
+        <h2>Services</h2>
+        <span class="count">{String(site.projects.length).padStart(2, "0")} tracked</span>
+      </div>
+
+      {site.projects.map((p) => (
+        <article class="svc">
+          <div>
+            <span class="id"><span class="dot" style="width:6px;height:6px;animation:none;box-shadow:none;"></span>{p.id}</span>
+            <h3>{p.title}</h3>
+            <p>{p.blurb}</p>
+            <div class="stack">
+              {p.stack.map((s) => <span class="chip">{s}</span>)}
+            </div>
+          </div>
+          <div class="meta">
+            <span class="status-pill"><span class="dot"></span>{statusLabel[p.status] ?? p.status}</span>
+            <span class="metric">{p.metric}</span>
+            {p.demo
+              ? <a class="view" href={p.demo} target="_blank" rel="noopener">view ↗</a>
+              : <span class="view muted">internal</span>}
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <!-- dependencies / stack -->
+    <section class="section" id="stack">
+      <div class="section-head">
+        <h2>Dependencies</h2>
+        <span class="count">stack</span>
+      </div>
+      <div class="deps">
+        {site.stack.map((g) => (
+          <div class="dep-group">
+            <h4>{g.group}</h4>
+            <ul>{g.items.map((it) => <li>{it}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- about -->
+    <section class="section about" id="about">
+      <div class="section-head">
+        <h2>About</h2>
+        <span class="count">readme</span>
+      </div>
+      {site.about.map((para) => <p set:html={para}></p>)}
+    </section>
+
+    <!-- footer -->
+    <footer class="foot">
+      <span class="mono">© {new Date().getFullYear()} {site.name}</span>
+      <div class="links-inline">
+        {links.github && <a href={links.github} target="_blank" rel="noopener">github</a>}
+        {links.linkedin && <a href={links.linkedin} target="_blank" rel="noopener">linkedin</a>}
+        {links.email && <a href={`mailto:${links.email}`}>email</a>}
+      </div>
+    </footer>
+  </main>
+</Base>
