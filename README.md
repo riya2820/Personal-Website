@@ -1,15 +1,12 @@
 # Portfolio
 
 A single-page personal site, built with Astro themed as a status page  with operational status.
+Includes about me secton, list of projects and contact information. 
 
 ```
 src/data/site.ts
 ```
 
-## See it right now (no install)
-
-Open `preview.html` in a browser. It's a standalone snapshot of the current
-content — handy for a quick look before you set anything up.
 
 ## Run it locally
 
